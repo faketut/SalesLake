@@ -1,0 +1,72 @@
+# models/schema.yml
+version: 2
+
+models:
+  - name: stg_sales
+    description: "Staged sales transactions data"
+    columns:
+      - name: transaction_id
+        description: "Primary key of the sales table"
+        tests:
+          - unique
+          - not_null
+      - name: store_id
+        description: "Store identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_stores')
+              field: store_id
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: total_amount
+        description: "Total transaction amount"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strict_min: true
+      - name: transaction_date
+        description: "Date and time of transaction"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "'2020-01-01'"
+              max_value: "{{ dbt.current_timestamp() }}"
+  
+  - name: fact_sales
+    description: "Fact table for sales transactions"
+    columns:
+      - name: transaction_id
+        description: "Primary key of the fact table"
+        tests:
+          - unique
+          - not_null
+      - name: gross_profit
+        description: "Calculated profit"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -1000  # Allow for some returns/refunds
+      - name: transaction_date
+        description: "Date and time of transaction"
+        tests:
+          - not_null
+
+  - name: dim_store_inventory
+    description: "Dimensional view of store inventory"
+    columns:
+      - name: inventory_id
+        description: "Primary key of the inventory dimension"
+        tests:
+          - unique
+          - not_null
+      - name: current_quantity
+        description: "Current stock level"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0

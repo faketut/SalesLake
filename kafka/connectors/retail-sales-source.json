@@ -1,2 +1,25 @@
 {
+"name": "retail-sales-source",
+"config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "tasks.max": "1",
+    "database.hostname": "retail-mysql-server",
+    "database.port": "3306",
+    "database.user": "dbz_user",
+    "database.password": "dbz_password",
+    "database.server.id": "1",
+    "database.server.name": "retail_mysql",
+    "database.include.list": "retail_db",
+    "table.include.list": "retail_db.sales,retail_db.inventory",
+    "database.history.kafka.bootstrap.servers": "kafka:9092",
+    "database.history.kafka.topic": "schema-changes.retail",
+    "include.schema.changes": "true",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter.schemas.enable": "true",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false"
+}
 }

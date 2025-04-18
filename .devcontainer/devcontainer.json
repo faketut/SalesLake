@@ -1,0 +1,24 @@
+{
+  "name": "SalesLake Development",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "airflow",
+  "workspaceFolder": "/opt/airflow",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "bastienboutonnet.vscode-dbt",
+        "innoverio.vscode-dbt-power-user",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true
+      }
+    }
+  },
+  "forwardPorts": [8080, 8083, 8181, 9092, 4566],
+  "postCreateCommand": "pip install -r requirements.txt"
+}
