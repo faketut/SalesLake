@@ -1,0 +1,1 @@
+# Connector registration script

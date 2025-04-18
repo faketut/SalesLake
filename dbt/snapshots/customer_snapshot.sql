@@ -1,0 +1,1 @@
+-- SCD type 2 snapshots
